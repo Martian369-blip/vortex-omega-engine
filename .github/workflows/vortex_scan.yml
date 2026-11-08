@@ -1,0 +1,32 @@
+name: 🌀 Vortex Omega Autonomous Breakout Radar
+on:
+  schedule:
+    # Runs automatically every 15 minutes, staggered by 5 minutes from Mars Bot to ensure clean execution
+    - cron: '5,20,35,50 * * * *'
+  workflow_dispatch:
+
+jobs:
+  execute-vortex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛸 Checkout Source Matrix Code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Initialize Python Engine Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: 📦 Install Data Packages
+        run: |
+          pip install yfinance pandas numpy requests
+
+      - name: 📡 Execute Simultaneous Vortex Volatility Scan
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          META_API_TOKEN: ${{ secrets.META_API_TOKEN }}
+          META_ACCOUNT_ID: ${{ secrets.META_ACCOUNT_ID }}
+        run: |
+          python vortex_omega.py
